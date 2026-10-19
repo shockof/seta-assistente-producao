@@ -1,0 +1,227 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		08951631187A40DF85284137 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = DC5C8A67374740618ADCDF7F /* GoogleSignIn */; };
+		309D782E100C4C68BA0C33F7 /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 0FA6FD6A9DDD4180B6FAD5CE /* GoogleSignInSwift */; };
+		369D806C75DA4F51A1F8F28D /* AssistenteProducao/Views/TeamViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DE6D6BE188342D8838735DA /* AssistenteProducao/Views/TeamViews.swift */; };
+		5D9A9A1C67D9494488268221 /* AssistenteProducao/Views/AppRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83C4D9EF03FE4955BD717BBA /* AssistenteProducao/Views/AppRootView.swift */; };
+		869FBB3220A24E46BC7F5CCC /* AssistenteProducao/Models/ProductionTeam.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EDE88258B5845F6ABB68658 /* AssistenteProducao/Models/ProductionTeam.swift */; };
+				977B5B84D68C435DAF635D2A /* AssistenteProducao/Views/ProducerDashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1290506B3E0499494979A1C /* AssistenteProducao/Views/ProducerDashboardView.swift */; };
+				A11111111111111111111111 /* AssistenteProducao/Views/ExpenseViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = A22222222222222222222222 /* AssistenteProducao/Views/ExpenseViews.swift */; };
+		C4712E795C7D43B397EF4354 /* AssistenteProducao/AssistenteProducaoApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EA653988C684488BC700755 /* AssistenteProducao/AssistenteProducaoApp.swift */; };
+		CC2F71A5ACE14C8588495930 /* AssistenteProducao/Views/LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE2B7B224F84B35886DFE61 /* AssistenteProducao/Views/LoginView.swift */; };
+		F6AB48780EC2479589223252 /* AssistenteProducao/Views/Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F1EEC3C21E94EA5A3552C72 /* AssistenteProducao/Views/Theme.swift */; };
+		B40192AA14E947DFA15F1001 /* AssistenteProducao/SupabaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B40192AA14E947DFA15F1002 /* AssistenteProducao/SupabaseService.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		7D0E13950CE142468E6A005F /* GoogleOAuth-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = AssistenteProducao/GoogleOAuth-Info.plist; sourceTree = "<group>"; };
+		088937F8F06E47DAAE748737 /* AssistenteProducao.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = AssistenteProducao/AssistenteProducao.entitlements; sourceTree = "<group>"; };
+		1F1EEC3C21E94EA5A3552C72 /* AssistenteProducao/Views/Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssistenteProducao/Views/Theme.swift; sourceTree = "<group>"; };
+		2EA653988C684488BC700755 /* AssistenteProducao/AssistenteProducaoApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssistenteProducao/AssistenteProducaoApp.swift; sourceTree = "<group>"; };
+		678AE60E7E234CF6B1E12B60 /* AssistenteProducao.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AssistenteProducao.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		6EDE88258B5845F6ABB68658 /* AssistenteProducao/Models/ProductionTeam.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssistenteProducao/Models/ProductionTeam.swift; sourceTree = "<group>"; };
+		7EE2B7B224F84B35886DFE61 /* AssistenteProducao/Views/LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssistenteProducao/Views/LoginView.swift; sourceTree = "<group>"; };
+		83C4D9EF03FE4955BD717BBA /* AssistenteProducao/Views/AppRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssistenteProducao/Views/AppRootView.swift; sourceTree = "<group>"; };
+		9DE6D6BE188342D8838735DA /* AssistenteProducao/Views/TeamViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssistenteProducao/Views/TeamViews.swift; sourceTree = "<group>"; };
+			E1290506B3E0499494979A1C /* AssistenteProducao/Views/ProducerDashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssistenteProducao/Views/ProducerDashboardView.swift; sourceTree = "<group>"; };
+		A22222222222222222222222 /* AssistenteProducao/Views/ExpenseViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssistenteProducao/Views/ExpenseViews.swift; sourceTree = "<group>"; };
+		B40192AA14E947DFA15F1002 /* AssistenteProducao/SupabaseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssistenteProducao/SupabaseService.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		088D3C1244AF4DE4831FB592 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				08951631187A40DF85284137 /* GoogleSignIn in Frameworks */,
+				309D782E100C4C68BA0C33F7 /* GoogleSignInSwift in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		43F1B8881F784503B32A70B8 = {
+			isa = PBXGroup;
+			children = (
+				7D0E13950CE142468E6A005F /* GoogleOAuth-Info.plist */,
+				088937F8F06E47DAAE748737 /* AssistenteProducao.entitlements */,
+				2EA653988C684488BC700755 /* AssistenteProducao/AssistenteProducaoApp.swift */,
+				6EDE88258B5845F6ABB68658 /* AssistenteProducao/Models/ProductionTeam.swift */,
+				83C4D9EF03FE4955BD717BBA /* AssistenteProducao/Views/AppRootView.swift */,
+				7EE2B7B224F84B35886DFE61 /* AssistenteProducao/Views/LoginView.swift */,
+				E1290506B3E0499494979A1C /* AssistenteProducao/Views/ProducerDashboardView.swift */,
+				A22222222222222222222222 /* AssistenteProducao/Views/ExpenseViews.swift */,
+				B40192AA14E947DFA15F1002 /* AssistenteProducao/SupabaseService.swift */,
+				9DE6D6BE188342D8838735DA /* AssistenteProducao/Views/TeamViews.swift */,
+				1F1EEC3C21E94EA5A3552C72 /* AssistenteProducao/Views/Theme.swift */,
+				7EB37B68002B4C15B16D0ADA /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		7EB37B68002B4C15B16D0ADA /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				678AE60E7E234CF6B1E12B60 /* AssistenteProducao.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		04C948C482B94081A4D90398 /* AssistenteProducao */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A20F2A9B2CC54FF3A66510F4 /* Build configuration list for PBXNativeTarget "AssistenteProducao" */;
+			buildPhases = (
+				16FE5D0BC5644B6DA159B056 /* Sources */,
+				088D3C1244AF4DE4831FB592 /* Frameworks */,
+				19316C154AE74A99A3AB30F9 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			packageProductDependencies = (
+				DC5C8A67374740618ADCDF7F /* GoogleSignIn */,
+				0FA6FD6A9DDD4180B6FAD5CE /* GoogleSignInSwift */,
+			);
+			name = AssistenteProducao;
+			productName = AssistenteProducao;
+			productReference = 678AE60E7E234CF6B1E12B60 /* AssistenteProducao.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		C4499E40E07F4D6FB5D98822 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 2700;
+			};
+			buildConfigurationList = 7773055211DC498692EE4A96 /* Build configuration list for PBXProject "AssistenteProducao" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = pt_BR;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				pt_BR,
+				en,
+				Base,
+			);
+			mainGroup = 43F1B8881F784503B32A70B8;
+			productRefGroup = 7EB37B68002B4C15B16D0ADA /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				04C948C482B94081A4D90398 /* AssistenteProducao */,
+			);
+			packageReferences = (
+				19DA8AF27E134CAAB2783DD4 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		19316C154AE74A99A3AB30F9 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		16FE5D0BC5644B6DA159B056 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C4712E795C7D43B397EF4354 /* AssistenteProducao/AssistenteProducaoApp.swift in Sources */,
+				869FBB3220A24E46BC7F5CCC /* AssistenteProducao/Models/ProductionTeam.swift in Sources */,
+				5D9A9A1C67D9494488268221 /* AssistenteProducao/Views/AppRootView.swift in Sources */,
+				CC2F71A5ACE14C8588495930 /* AssistenteProducao/Views/LoginView.swift in Sources */,
+				977B5B84D68C435DAF635D2A /* AssistenteProducao/Views/ProducerDashboardView.swift in Sources */,
+				A11111111111111111111111 /* AssistenteProducao/Views/ExpenseViews.swift in Sources */,
+				369D806C75DA4F51A1F8F28D /* AssistenteProducao/Views/TeamViews.swift in Sources */,
+				F6AB48780EC2479589223252 /* AssistenteProducao/Views/Theme.swift in Sources */,
+				B40192AA14E947DFA15F1001 /* AssistenteProducao/SupabaseService.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		19DA8AF27E134CAAB2783DD4 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */ = {isa = XCRemoteSwiftPackageReference; repositoryURL = "https://github.com/google/GoogleSignIn-iOS"; requirement = {kind = upToNextMajorVersion; minimumVersion = 9.0.0; }; };
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		DC5C8A67374740618ADCDF7F /* GoogleSignIn */ = {isa = XCSwiftPackageProductDependency; package = 19DA8AF27E134CAAB2783DD4 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */; productName = GoogleSignIn; };
+		0FA6FD6A9DDD4180B6FAD5CE /* GoogleSignInSwift */ = {isa = XCSwiftPackageProductDependency; package = 19DA8AF27E134CAAB2783DD4 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */; productName = GoogleSignInSwift; };
+/* End XCSwiftPackageProductDependency section */
+
+/* Begin XCBuildConfiguration section */
+		765EEFCFD547490A87A85FAB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		BB02F1AA8845438D86FD7D6D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				"CODE_SIGNING_ALLOWED[sdk=iphonesimulator*]" = NO;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 8AMH87NN3K;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = AssistenteProducao/GoogleOAuth-Info.plist;
+				APPLE_SIGN_IN_ENABLED = NO;
+				GOOGLE_CLIENT_ID = 794777321077-fqleojbc9hnmffvkcokkao6u5o0q871h.apps.googleusercontent.com;
+				GOOGLE_REVERSED_CLIENT_ID = com.googleusercontent.apps.794777321077-fqleojbc9hnmffvkcokkao6u5o0q871h;
+				INFOPLIST_KEY_CFBundleDisplayName = Seta;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				PRODUCT_BUNDLE_IDENTIFIER = br.com.seta.AssistenteProducao;
+				PRODUCT_NAME = AssistenteProducao;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		7773055211DC498692EE4A96 /* Build configuration list for PBXProject "AssistenteProducao" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				765EEFCFD547490A87A85FAB /* Debug */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		A20F2A9B2CC54FF3A66510F4 /* Build configuration list for PBXNativeTarget "AssistenteProducao" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BB02F1AA8845438D86FD7D6D /* Debug */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = C4499E40E07F4D6FB5D98822 /* Project object */;
+}
