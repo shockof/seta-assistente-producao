@@ -29,6 +29,7 @@ Execute as migrações em ordem pelo SQL Editor do Supabase ou pela ferramenta d
 
 1. `202610180001_repair_team_owner_insert_policy.sql`
 2. `202610190001_annual_web_subscription.sql`
+3. `202610200002_admin_console.sql`
 
 A primeira restaura o proprietário da equipe a partir da sessão. A segunda cria o registro de assinatura e passa a exigir plano anual ativo para criar, consultar, alterar ou excluir equipes e operar os dados relacionados. Usuários podem entrar e assinar antes de acessar as equipes.
 
@@ -47,3 +48,17 @@ Se o erro de RLS continuar antes de ativar o plano, execute primeiro a migraçã
 O entitlement no banco é compartilhado pela conta, então uma assinatura anual ativa libera a equipe também para sessões móveis usando a mesma conta. Antes de distribuir o app pela App Store, cadastre a assinatura equivalente no App Store Connect e implemente a compra/validação com StoreKit. As regras da Apple para serviços multiplataforma exigem que os itens compráveis fora do app também estejam disponíveis como compra dentro do app. A versão atual do site ainda não inclui uma opção de pagamento da App Store.
 
 Enquanto Stripe e webhook não estiverem configurados, o botão de assinatura apresentará uma mensagem de configuração pendente; nenhuma assinatura será inventada ou liberada pelo navegador.
+
+
+## Painel administrativo
+
+Para ativar o painel, aplique `202610200002_admin_console.sql` e inclua a conta proprietária na allowlist usando o SQL Editor do Supabase. Troque o exemplo pelo e-mail confirmado da sua própria conta:
+
+```sql
+insert into public.app_admins (user_id)
+select id from auth.users
+where lower(email) = lower('SEU-EMAIL-CONFIRMADO')
+on conflict (user_id) do nothing;
+```
+
+Publique a função `admin-console`. Ela valida a sessão e a tabela privada `app_admins` antes de consultar contas e dados com a chave de serviço. Nunca coloque essa chave no navegador. O painel lista e suspende/reativa contas e permite consultar perfis, equipes, integrantes, despesas, comprovantes, mensagens e assinaturas. Senhas e dados de cartão não são acessíveis.

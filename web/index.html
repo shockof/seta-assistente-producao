@@ -16,6 +16,7 @@
         </a>
         <div id="account-actions" class="account-actions" hidden>
           <span id="user-email" class="user-email"></span>
+          <button id="admin-open" class="button button-quiet" hidden>Painel de controle</button>
           <button id="manage-plan" class="button button-quiet" hidden>Gerenciar plano</button>
           <button id="sign-out" class="button button-quiet">Sair</button>
         </div>
@@ -77,6 +78,28 @@
           <div class="stats-row"><div class="stat-card"><span>Equipes</span><strong id="team-count">0</strong></div><div class="stat-card"><span>Integrantes</span><strong id="member-count">0</strong></div><div class="stat-card plan-stat"><span>Plano</span><strong id="plan-status">Anual ativo</strong></div></div>
           <div id="teams-list" class="teams-grid"></div>
           <div id="dashboard-message" class="message" role="status"></div>
+        </section>
+        <section id="admin-view" class="admin-view" hidden>
+          <div class="admin-heading">
+            <div><span class="eyebrow">ADMINISTRAÇÃO SETA</span><h1>Painel de controle</h1><p>Contas e informações das equipes, produções e prestações de contas.</p></div>
+            <div class="admin-heading-actions"><button id="admin-back" class="button button-quiet">Voltar ao app</button><button id="admin-reload" class="button button-primary">Atualizar dados</button></div>
+          </div>
+          <div id="admin-message" class="message" role="status"></div>
+          <div id="admin-counts" class="admin-counts"></div>
+          <div class="admin-grid">
+            <section class="admin-card">
+              <div class="admin-card-heading"><div><h2>Contas em uso</h2><p>Ative ou suspenda o acesso ao app.</p></div><select id="admin-account-filter" aria-label="Filtrar contas"><option value="all">Todas</option><option value="active">Ativas</option><option value="inactive">Inativas</option></select></div>
+              <label class="admin-search-label">Buscar conta<input id="admin-account-search" type="search" placeholder="Nome ou e-mail" /></label>
+              <div id="admin-accounts" class="admin-list"></div>
+              <div class="admin-pagination"><button id="admin-account-prev" class="text-button">Anterior</button><span id="admin-account-page">Página 1</span><button id="admin-account-next" class="text-button">Próxima</button></div>
+            </section>
+            <section class="admin-card admin-data-card">
+              <div class="admin-card-heading"><div><h2>Dados do app</h2><p>Consulte os registros de todas as contas.</p></div><select id="admin-collection" aria-label="Categoria dos dados"><option value="profiles">Perfis</option><option value="teams">Equipes</option><option value="team_members">Integrantes</option><option value="expenses">Despesas</option><option value="expense_receipts">Comprovantes</option><option value="team_messages">Mensagens</option><option value="billing_subscriptions">Assinaturas</option></select></div>
+              <div id="admin-records" class="admin-records"></div>
+              <div class="admin-pagination"><button id="admin-record-prev" class="text-button">Anterior</button><span id="admin-record-page">Página 1</span><button id="admin-record-next" class="text-button">Próxima</button></div>
+            </section>
+          </div>
+          <p class="admin-privacy-note">O painel não exibe senhas nem dados de cartão. A suspensão bloqueia o acesso à conta no Seta.</p>
         </section>
       </main>
       <footer><span>Seta · Assistente de Produção</span><span>Seus dados são protegidos pelo Supabase.</span></footer>

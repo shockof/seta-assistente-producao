@@ -5,10 +5,18 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
   auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true },
 });
 const $ = (id) => document.getElementById(id);
-const views = [$("auth-view"), $("billing-view"), $("dashboard-view")];
+const views = [$("auth-view"), $("billing-view"), $("dashboard-view"), $("admin-view")];
 let authMode = "signin";
 let signedInUser = null;
 let teamMembers = new Map();
+let isAppAdmin = false;
+let adminAccountPage = 1;
+let adminRecordPage = 1;
+let adminHasMoreAccounts = false;
+let adminHasMoreRecords = false;
+let adminAccountRows = [];
+let adminCounts = {};
+let adminRecords = [];
 
 function showView(view) {
   views.forEach((item) => { item.hidden = item !== view; });
@@ -79,8 +87,13 @@ $("sign-out").addEventListener("click", async () => {
 async function refreshApp() {
   const { data: { session } } = await supabase.auth.getSession();
   signedInUser = session?.user ?? null;
+  isAppAdmin = false;
+  $("admin-open").hidden = true;
   if (!signedInUser) { showView($("auth-view")); return; }
   $("user-email").textContent = signedInUser.email ?? "";
+  const { data: adminCheck } = await supabase.functions.invoke("admin-console", { body: { action: "check" } });
+  isAppAdmin = adminCheck?.is_admin === true;
+  $("admin-open").hidden = !isAppAdmin;
   const [{ data: subscription, error: subError }, { data: hasAccess, error: accessError }] = await Promise.all([
     supabase.from("billing_subscriptions")
       .select("status,current_period_end,cancel_at_period_end,stripe_customer_id")
@@ -93,7 +106,7 @@ async function refreshApp() {
   const endDate = subscription?.current_period_end ? new Date(subscription.current_period_end) : null;
   const paid = ["active", "trialing"].includes(subscription?.status) && (!endDate || endDate > new Date());
   const entitled = paid || (!accessError && hasAccess === true);
-  if (!entitled) {
+  if (!entitled && !isAppAdmin) {
     $("manage-plan").hidden = true;
     showView($("billing-view"));
     const paymentState = new URLSearchParams(location.search).get("payment");
@@ -103,12 +116,120 @@ async function refreshApp() {
     return;
   }
   $("manage-plan").hidden = !subscription?.stripe_customer_id;
-  $("plan-status").textContent = paid
+  $("plan-status").textContent = isAppAdmin && !entitled ? "Acesso administrativo" : paid
     ? subscription.cancel_at_period_end ? "Ativo até o fim do período" : "Anual ativo"
     : "Acesso de teste";
   showView($("dashboard-view"));
   await loadDashboard();
 }
+
+async function adminRequest(body) {
+  const { data, error } = await supabase.functions.invoke("admin-console", { body });
+  if (error) throw error;
+  if (data?.error) throw new Error(data.error);
+  return data;
+}
+
+function adminDate(value) {
+  return value ? new Date(value).toLocaleString("pt-BR") : "Nunca";
+}
+
+function renderAdminCounts() {
+  const labels = { active_accounts: "Contas ativas", inactive_accounts: "Contas inativas", teams: "Equipes", team_members: "Integrantes", expenses: "Despesas", expense_receipts: "Comprovantes", team_messages: "Mensagens", billing_subscriptions: "Assinaturas" };
+  const root = $("admin-counts"); root.replaceChildren();
+  for (const [key, label] of Object.entries(labels)) {
+    const card = document.createElement("div"); card.className = "admin-count-card";
+    const name = document.createElement("span"); name.textContent = label;
+    const value = document.createElement("strong"); value.textContent = String(adminCounts[key] ?? 0);
+    card.append(name, value); root.append(card);
+  }
+}
+
+function renderAdminAccounts() {
+  const root = $("admin-accounts"); root.replaceChildren();
+  const query = $("admin-account-search").value.trim().toLocaleLowerCase("pt-BR");
+  const filter = $("admin-account-filter").value;
+  const rows = adminAccountRows.filter((account) => {
+    const state = filter === "all" || (filter === "active" ? account.active : !account.active);
+    const search = !query || `${account.full_name} ${account.email}`.toLocaleLowerCase("pt-BR").includes(query);
+    return state && search;
+  });
+  if (!rows.length) { const empty = document.createElement("div"); empty.className = "admin-empty"; empty.textContent = "Nenhuma conta encontrada nesta página."; root.append(empty); }
+  for (const account of rows) {
+    const row = document.createElement("article"); row.className = "admin-account-row";
+    const identity = document.createElement("div"); identity.className = "admin-account-identity";
+    const name = document.createElement("strong"); name.textContent = account.full_name || account.email || "Conta sem nome";
+    const details = document.createElement("span"); details.textContent = `${account.email} · ${account.profession || account.provider}${account.email_confirmed ? "" : " · e-mail pendente"}`;
+    const seen = document.createElement("small"); seen.textContent = `Último acesso: ${adminDate(account.last_sign_in_at)}`;
+    identity.append(name, details, seen);
+    const status = document.createElement("span"); status.className = `admin-status ${account.active ? "active" : "inactive"}`; status.textContent = account.active ? "Ativa" : "Inativa";
+    const action = document.createElement("button"); action.type = "button"; action.className = `admin-toggle ${account.active ? "deactivate" : "activate"}`; action.textContent = account.active ? "Suspender" : "Reativar";
+    action.addEventListener("click", async () => {
+      const nextState = !account.active;
+      if (!confirm(`Deseja ${nextState ? "reativar" : "suspender"} a conta ${account.email}?`)) return;
+      action.disabled = true;
+      try {
+        await adminRequest({ action: "set-status", user_id: account.id, active: nextState });
+        message("admin-message", `Conta ${nextState ? "reativada" : "suspensa"} com sucesso.`, true);
+        await loadAdminAccounts();
+      } catch (error) { message("admin-message", formatError(error)); action.disabled = false; }
+    });
+    const controls = document.createElement("div"); controls.className = "admin-account-controls"; controls.append(status, action);
+    row.append(identity, controls); root.append(row);
+  }
+  $("admin-account-page").textContent = `Página ${adminAccountPage}`;
+  $("admin-account-prev").disabled = adminAccountPage <= 1;
+  $("admin-account-next").disabled = !adminHasMoreAccounts;
+}
+
+async function loadAdminAccounts() {
+  const data = await adminRequest({ action: "accounts", page: adminAccountPage });
+  adminAccountRows = data.accounts ?? []; adminHasMoreAccounts = Boolean(data.has_more); renderAdminAccounts();
+}
+
+function renderAdminRecords() {
+  const root = $("admin-records"); root.replaceChildren();
+  if (!adminRecords.length) { const empty = document.createElement("div"); empty.className = "admin-empty"; empty.textContent = "Nenhum registro encontrado."; root.append(empty); }
+  for (const record of adminRecords) {
+    const card = document.createElement("details"); card.className = "admin-record";
+    const summary = document.createElement("summary");
+    const title = record.name || record.full_name || record.email || record.description || record.body || record.file_name || record.id || "Registro";
+    summary.textContent = `${$("admin-collection").selectedOptions[0]?.textContent ?? "Registro"}: ${title}`;
+    const pre = document.createElement("pre"); pre.textContent = JSON.stringify(record, (key, value) => key === "signed_url" ? undefined : value, 2);
+    card.append(summary, pre);
+    if (record.signed_url) { const link = document.createElement("a"); link.href = record.signed_url; link.target = "_blank"; link.rel = "noreferrer"; link.className = "admin-file-link"; link.textContent = `Abrir comprovante: ${record.file_name || "imagem"}`; card.append(link); }
+    root.append(card);
+  }
+  $("admin-record-page").textContent = `Página ${adminRecordPage}`;
+  $("admin-record-prev").disabled = adminRecordPage <= 1;
+  $("admin-record-next").disabled = !adminHasMoreRecords;
+}
+
+async function loadAdminRecords() {
+  const data = await adminRequest({ action: "records", collection: $("admin-collection").value, page: adminRecordPage });
+  adminRecords = data.records ?? []; adminHasMoreRecords = Boolean(data.has_more); renderAdminRecords();
+}
+
+async function loadAdmin() {
+  if (!isAppAdmin) return;
+  showView($("admin-view")); message("admin-message", "Carregando contas e dados…", true);
+  try {
+    const [summary] = await Promise.all([adminRequest({ action: "summary" }), loadAdminAccounts(), loadAdminRecords()]);
+    adminCounts = summary.counts ?? {}; renderAdminCounts(); message("admin-message");
+  } catch (error) { message("admin-message", formatError(error)); }
+}
+
+$("admin-open").addEventListener("click", loadAdmin);
+$("admin-back").addEventListener("click", () => showView($("dashboard-view")));
+$("admin-reload").addEventListener("click", loadAdmin);
+$("admin-account-search").addEventListener("input", renderAdminAccounts);
+$("admin-account-filter").addEventListener("change", renderAdminAccounts);
+$("admin-collection").addEventListener("change", () => { adminRecordPage = 1; loadAdminRecords().catch((error) => message("admin-message", formatError(error))); });
+$("admin-account-prev").addEventListener("click", () => { if (adminAccountPage > 1) { adminAccountPage--; loadAdminAccounts().catch((error) => message("admin-message", formatError(error))); } });
+$("admin-account-next").addEventListener("click", () => { if (adminHasMoreAccounts) { adminAccountPage++; loadAdminAccounts().catch((error) => message("admin-message", formatError(error))); } });
+$("admin-record-prev").addEventListener("click", () => { if (adminRecordPage > 1) { adminRecordPage--; loadAdminRecords().catch((error) => message("admin-message", formatError(error))); } });
+$("admin-record-next").addEventListener("click", () => { if (adminHasMoreRecords) { adminRecordPage++; loadAdminRecords().catch((error) => message("admin-message", formatError(error))); } });
+
 
 async function loadDashboard() {
   message("dashboard-message", "Carregando equipes…", true);
