@@ -81,14 +81,19 @@ async function refreshApp() {
   signedInUser = session?.user ?? null;
   if (!signedInUser) { showView($("auth-view")); return; }
   $("user-email").textContent = signedInUser.email ?? "";
-  const { data: subscription, error: subError } = await supabase.from("billing_subscriptions")
-    .select("status,current_period_end,cancel_at_period_end").eq("user_id", signedInUser.id).maybeSingle();
+  const [{ data: subscription, error: subError }, { data: hasAccess, error: accessError }] = await Promise.all([
+    supabase.from("billing_subscriptions")
+      .select("status,current_period_end,cancel_at_period_end,stripe_customer_id")
+      .eq("user_id", signedInUser.id).maybeSingle(),
+    supabase.rpc("has_active_subscription", { target_user_id: signedInUser.id }),
+  ]);
   if (subError && !/does not exist|schema cache/i.test(subError.message)) {
     showView($("billing-view")); message("billing-message", formatError(subError)); return;
   }
   const endDate = subscription?.current_period_end ? new Date(subscription.current_period_end) : null;
   const paid = ["active", "trialing"].includes(subscription?.status) && (!endDate || endDate > new Date());
-  if (!paid) {
+  const entitled = paid || (!accessError && hasAccess === true);
+  if (!entitled) {
     $("manage-plan").hidden = true;
     showView($("billing-view"));
     const paymentState = new URLSearchParams(location.search).get("payment");
@@ -97,8 +102,10 @@ async function refreshApp() {
       : paymentState === "cancelled" ? "Pagamento cancelado. Você pode retomar quando quiser." : "", paymentState === "success");
     return;
   }
-  $("manage-plan").hidden = false;
-  $("plan-status").textContent = subscription.cancel_at_period_end ? "Ativo até o fim do período" : "Anual ativo";
+  $("manage-plan").hidden = !subscription?.stripe_customer_id;
+  $("plan-status").textContent = paid
+    ? subscription.cancel_at_period_end ? "Ativo até o fim do período" : "Anual ativo"
+    : "Acesso de teste";
   showView($("dashboard-view"));
   await loadDashboard();
 }
