@@ -1,7 +1,7 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
-const configuredWebURL = Deno.env.get("SETA_WEB_URL");
-const corsOrigin = configuredWebURL ? new URL(configuredWebURL).origin : "null";
+const webURL = Deno.env.get("SETA_WEB_URL") ?? "https://shockof.github.io/seta-assistente-producao/";
+const corsOrigin = new URL(webURL).origin;
 const corsHeaders = {
   "Access-Control-Allow-Origin": corsOrigin,
   "Access-Control-Allow-Headers": "authorization, apikey, content-type, x-client-info",
@@ -21,8 +21,7 @@ Deno.serve(async (request) => {
   const publishableKey = Deno.env.get("SUPABASE_ANON_KEY");
   const stripeSecret = Deno.env.get("STRIPE_SECRET_KEY");
   const annualPrice = Deno.env.get("STRIPE_ANNUAL_PRICE_ID");
-  const webURL = Deno.env.get("SETA_WEB_URL");
-  if (!supabaseUrl || !publishableKey || !stripeSecret || !annualPrice || !webURL) {
+  if (!supabaseUrl || !publishableKey || !stripeSecret || !annualPrice) {
     return json({ error: "A cobrança anual ainda não foi configurada no servidor." }, 503);
   }
 
