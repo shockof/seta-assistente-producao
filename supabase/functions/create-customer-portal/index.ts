@@ -1,7 +1,7 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
-const configuredWebURL = Deno.env.get("SETA_WEB_URL");
-const corsOrigin = configuredWebURL ? new URL(configuredWebURL).origin : "null";
+const webURL = Deno.env.get("SETA_WEB_URL") ?? "https://shockof.github.io/seta-assistente-producao/";
+const corsOrigin = new URL(webURL).origin;
 const corsHeaders = {
   "Access-Control-Allow-Origin": corsOrigin,
   "Access-Control-Allow-Headers": "authorization, apikey, content-type, x-client-info",
@@ -18,9 +18,8 @@ Deno.serve(async (request) => {
   const supabaseUrl = Deno.env.get("SUPABASE_URL");
   const publishableKey = Deno.env.get("SUPABASE_ANON_KEY");
   const stripeSecret = Deno.env.get("STRIPE_SECRET_KEY");
-  const webURL = Deno.env.get("SETA_WEB_URL");
   if (!authorization?.startsWith("Bearer ")) return json({ error: "Entre na sua conta para continuar." }, 401);
-  if (!supabaseUrl || !publishableKey || !stripeSecret || !webURL) return json({ error: "A gestão de cobrança ainda não foi configurada." }, 503);
+  if (!supabaseUrl || !publishableKey || !stripeSecret) return json({ error: "A gestão de cobrança ainda não foi configurada." }, 503);
 
   try {
     const supabase = createClient(supabaseUrl, publishableKey, {
