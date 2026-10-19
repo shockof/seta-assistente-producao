@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#f4f6fb" />
+    <meta name="description" content="Organize equipes e produções com o Seta." />
+    <title>Seta — Assistente de Produção</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <a class="brand" href="#" aria-label="Seta início">
+          <span class="brand-mark">✦</span><span>Seta</span>
+        </a>
+        <div id="account-actions" class="account-actions" hidden>
+          <span id="user-email" class="user-email"></span>
+          <button id="manage-plan" class="button button-quiet" hidden>Gerenciar plano</button>
+          <button id="sign-out" class="button button-quiet">Sair</button>
+        </div>
+      </header>
+
+      <main>
+        <section id="auth-view" class="auth-layout">
+          <div class="intro">
+            <span class="eyebrow">PRODUÇÃO EM MOVIMENTO</span>
+            <h1>Seu time pronto para a próxima cena.</h1>
+            <p>Organize equipes, funções e contatos num só lugar.</p>
+            <div class="feature-list">
+              <span><b>01</b> Equipes organizadas</span>
+              <span><b>02</b> Pessoas e funções</span>
+              <span><b>03</b> Acesso sincronizado</span>
+            </div>
+          </div>
+          <div class="auth-card">
+            <div class="auth-tabs">
+              <button class="auth-tab active" data-mode="signin">Entrar</button>
+              <button class="auth-tab" data-mode="signup">Criar acesso</button>
+            </div>
+            <form id="auth-form">
+              <label id="name-label" hidden>Nome<input id="full-name" autocomplete="name" /></label>
+              <label>E-mail<input id="email" type="email" autocomplete="email" placeholder="voce@email.com" required /></label>
+              <label>Senha<input id="password" type="password" autocomplete="current-password" minlength="6" placeholder="Mínimo de 6 caracteres" required /></label>
+              <button id="auth-submit" class="button button-primary full-width" type="submit">Entrar <span>→</span></button>
+            </form>
+            <div class="divider"><span>ou continue com</span></div>
+            <button id="google-sign-in" class="button button-social full-width"><span class="google-g">G</span> Continuar com Google</button>
+            <p id="auth-message" class="message" role="status"></p>
+            <p class="small-note">Ao continuar, você concorda com os termos e a política de privacidade do Seta.</p>
+          </div>
+        </section>
+
+        <section id="billing-view" class="billing-layout" hidden>
+          <div class="billing-card">
+            <span class="eyebrow">SETA PRO</span>
+            <h1>Produção organizada, sem limite de equipe.</h1>
+            <p class="billing-lead">Um plano anual para manter equipes, contatos e informações sincronizados.</p>
+            <div class="price"><strong>R$ 4,99</strong><span>/ mês</span></div>
+            <p class="billing-term">Cobrança anual de <strong>R$ 59,88</strong>. Renovação automática anual. Cancele quando quiser; o acesso segue até o fim do período pago.</p>
+            <ul class="benefit-list">
+              <li>Crie e organize suas equipes</li>
+              <li>Convide integrantes pelo e-mail da conta Seta</li>
+              <li>Mantenha suas informações sincronizadas na sua conta</li>
+            </ul>
+            <button id="subscribe" class="button button-primary full-width">Assinar plano anual <span>→</span></button>
+            <button id="refresh-plan" class="text-button">Já assinei? Atualizar acesso</button>
+            <p id="billing-message" class="message" role="status"></p>
+          </div>
+        </section>
+
+        <section id="dashboard-view" class="dashboard" hidden>
+          <div class="dashboard-heading">
+            <div><span class="eyebrow">SEU ESPAÇO DE PRODUÇÃO</span><h1 id="welcome-title">Suas equipes</h1><p>Reúna as pessoas certas para cada produção.</p></div>
+            <button id="create-team-open" class="button button-primary">＋ Nova equipe</button>
+          </div>
+          <div class="stats-row"><div class="stat-card"><span>Equipes</span><strong id="team-count">0</strong></div><div class="stat-card"><span>Integrantes</span><strong id="member-count">0</strong></div><div class="stat-card plan-stat"><span>Plano</span><strong id="plan-status">Anual ativo</strong></div></div>
+          <div id="teams-list" class="teams-grid"></div>
+          <div id="dashboard-message" class="message" role="status"></div>
+        </section>
+      </main>
+      <footer><span>Seta · Assistente de Produção</span><span>Seus dados são protegidos pelo Supabase.</span></footer>
+    </div>
+
+    <dialog id="team-dialog" class="modal">
+      <form id="team-form" method="dialog">
+        <div class="modal-heading"><div><span class="eyebrow">NOVA EQUIPE</span><h2>Vamos montar seu time</h2></div><button class="icon-button" value="cancel" aria-label="Fechar">×</button></div>
+        <label>Nome da equipe<input id="team-name" required maxlength="80" placeholder="Ex.: Gravação de sexta" /></label>
+        <label>Descrição<textarea id="team-description" rows="3" maxlength="500" placeholder="Projeto, diária ou informações importantes"></textarea></label>
+        <div class="modal-actions"><button class="button button-quiet" value="cancel">Cancelar</button><button id="team-save" class="button button-primary" value="default">Criar equipe</button></div>
+      </form>
+    </dialog>
+
+    <dialog id="member-dialog" class="modal">
+      <form id="member-form" method="dialog">
+        <div class="modal-heading"><div><span class="eyebrow">INTEGRANTE</span><h2>Adicionar à equipe</h2></div><button class="icon-button" value="cancel" aria-label="Fechar">×</button></div>
+        <label>Nome<input id="member-name" required maxlength="120" autocomplete="name" /></label>
+        <label>E-mail da conta Seta<input id="member-email" required type="email" autocomplete="email" /></label>
+        <label>WhatsApp / telefone com DDI<input id="member-phone" type="tel" autocomplete="tel" placeholder="+55 11 99999-9999" /></label>
+        <label>Função<select id="member-role" required><option value="">Selecione</option><option>Produtor geral</option><option>Produtor (a)</option><option>Assistente de produção</option><option>Câmera</option><option>Operador de TP</option><option>Assistente de câmera (AC)</option><option>Arte</option><option>Direção</option><option>Áudio</option><option>Maquinário</option><option>Gaffer</option><option>Eletricista</option><option>Motorista</option></select></label>
+        <p class="small-note">A pessoa deve usar o mesmo e-mail do cadastro no Seta.</p>
+        <div class="modal-actions"><button class="button button-quiet" value="cancel">Cancelar</button><button id="member-save" class="button button-primary" value="default">Adicionar</button></div>
+      </form>
+    </dialog>
+
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>
